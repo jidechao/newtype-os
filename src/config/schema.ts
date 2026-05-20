@@ -305,6 +305,13 @@ export const BackgroundTaskConfigSchema = z.object({
   modelConcurrency: z.record(z.string(), z.number().min(1)).optional(),
 });
 
+export const TaskCircuitBreakerConfigSchema = z.object({
+  max_per_session: z.number().min(1).max(1000).optional(),
+  max_per_minute: z.number().min(1).max(300).optional(),
+  max_depth: z.number().min(1).max(20).optional(),
+  max_duplicate_tasks: z.number().min(1).max(20).optional(),
+});
+
 export const NotificationConfigSchema = z.object({
   /** Force enable session-notification even if external notification plugins are detected (default: false) */
   force_enable: z.boolean().optional(),
@@ -367,6 +374,7 @@ export const OhMyOpenCodeConfigSchema = z.object({
   skills: SkillsConfigSchema.optional(),
   ralph_loop: RalphLoopConfigSchema.optional(),
   background_task: BackgroundTaskConfigSchema.optional(),
+  task_circuit_breaker: TaskCircuitBreakerConfigSchema.optional(),
   notification: NotificationConfigSchema.optional(),
   git_master: GitMasterConfigSchema.optional(),
   confidence: ConfidenceConfigSchema.optional(),
@@ -377,6 +385,7 @@ export type OhMyOpenCodeConfig = z.infer<typeof OhMyOpenCodeConfigSchema>;
 export type AgentOverrideConfig = z.infer<typeof AgentOverrideConfigSchema>;
 export type AgentOverrides = z.infer<typeof AgentOverridesSchema>;
 export type BackgroundTaskConfig = z.infer<typeof BackgroundTaskConfigSchema>;
+export type TaskCircuitBreakerConfig = z.infer<typeof TaskCircuitBreakerConfigSchema>;
 export type AgentName = z.infer<typeof AgentNameSchema>;
 export type HookName = z.infer<typeof HookNameSchema>;
 export type BuiltinCommandName = z.infer<typeof BuiltinCommandNameSchema>;

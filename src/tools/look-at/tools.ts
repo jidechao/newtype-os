@@ -1,5 +1,6 @@
 import { extname, basename } from "node:path"
 import { pathToFileURL } from "node:url"
+import { existsSync } from "node:fs"
 import { tool, type PluginInput, type ToolDefinition } from "@opencode-ai/plugin"
 import { LOOK_AT_DESCRIPTION, MULTIMODAL_LOOKER_AGENT } from "./constants"
 import type { LookAtArgs } from "./types"
@@ -43,6 +44,11 @@ function inferMimeType(filePath: string): string {
   return mimeTypes[ext] || "application/octet-stream"
 }
 
+type SessionMessage = {
+  info?: { role?: string; time?: { created?: number } }
+  parts?: Array<{ type?: string; text?: string }>
+}
+
 export function createLookAt(ctx: PluginInput): ToolDefinition {
   return tool({
     description: LOOK_AT_DESCRIPTION,
@@ -52,6 +58,14 @@ export function createLookAt(ctx: PluginInput): ToolDefinition {
     },
     async execute(args: LookAtArgs, toolContext) {
       log(`[look_at] Analyzing file: ${args.file_path}, goal: ${args.goal}`)
+
+      if (!existsSync(args.file_path)) {
+        return [
+          `Error: File not found: ${args.file_path}`,
+          "",
+          "Stop retrying look_at for this path. Verify the path, permissions, and allowed directories before trying again.",
+        ].join("\n")
+      }
 
       const mimeType = inferMimeType(args.file_path)
       const filename = basename(args.file_path)
@@ -112,22 +126,19 @@ If the requested information is not found, clearly state what is missing.`
       const messages = messagesResult.data
       log(`[look_at] Got ${messages.length} messages`)
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const lastAssistantMessage = messages
-        .filter((m: any) => m.info.role === "assistant")
-        .sort((a: any, b: any) => (b.info.time?.created || 0) - (a.info.time?.created || 0))[0]
+      const lastAssistantMessage = (messages as SessionMessage[])
+        .filter((m) => m.info?.role === "assistant")
+        .sort((a, b) => (b.info?.time?.created ?? 0) - (a.info?.time?.created ?? 0))[0]
 
       if (!lastAssistantMessage) {
         log(`[look_at] No assistant message found`)
         return `Error: No response from multimodal-looker agent`
       }
 
-      log(`[look_at] Found assistant message with ${lastAssistantMessage.parts.length} parts`)
+      log(`[look_at] Found assistant message with ${lastAssistantMessage.parts?.length ?? 0} parts`)
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const textParts = lastAssistantMessage.parts.filter((p: any) => p.type === "text")
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const responseText = textParts.map((p: any) => p.text).join("\n")
+      const textParts = lastAssistantMessage.parts?.filter((p) => p.type === "text") ?? []
+      const responseText = textParts.map((p) => p.text ?? "").join("\n")
 
       log(`[look_at] Got response, length: ${responseText.length}`)
 

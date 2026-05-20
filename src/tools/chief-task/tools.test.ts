@@ -1,6 +1,7 @@
 import { describe, test, expect } from "bun:test"
 import { DEFAULT_CATEGORIES, CATEGORY_PROMPT_APPENDS, CATEGORY_DESCRIPTIONS, CHIEF_TASK_DESCRIPTION } from "./constants"
 import type { CategoryConfig } from "../../config/schema"
+import { createTaskGuard } from "./task-guard"
 
 function resolveCategoryConfig(
   categoryName: string,
@@ -30,6 +31,169 @@ function resolveCategoryConfig(
 }
 
 describe("chief-task", () => {
+  describe("task circuit breaker", () => {
+    test("blocks after max_per_session reservations", () => {
+      // #given
+      const guard = createTaskGuard({ max_per_session: 2 })
+      const first = guard.reserve("root", "first")
+      const second = guard.reserve("root", "second")
+
+      // #when
+      const third = guard.reserve("root", "third")
+
+      // #then
+      expect(first.allowed).toBe(true)
+      expect(second.allowed).toBe(true)
+      expect(third.allowed).toBe(false)
+      if (!third.allowed) {
+        expect(third.message).toContain("session task limit")
+      }
+    })
+
+    test("release frees a failed reservation", () => {
+      // #given
+      const guard = createTaskGuard({ max_per_session: 1 })
+      const first = guard.reserve("root", "first")
+      if (!first.allowed) throw new Error("expected first reservation")
+
+      // #when
+      first.release()
+      const second = guard.reserve("root", "second")
+
+      // #then
+      expect(second.allowed).toBe(true)
+    })
+
+    test("commit tracks descendant depth", () => {
+      // #given
+      const guard = createTaskGuard({ max_depth: 1 })
+      const first = guard.reserve("root", "first")
+      if (!first.allowed) throw new Error("expected first reservation")
+      first.commit("child")
+
+      // #when
+      const nested = guard.reserve("child", "nested")
+
+      // #then
+      expect(nested.allowed).toBe(false)
+      if (!nested.allowed) {
+        expect(nested.message).toContain("maximum task depth")
+      }
+    })
+
+    test("blocks rapid task creation by max_per_minute", () => {
+      // #given
+      const guard = createTaskGuard({ max_per_minute: 1 })
+      const first = guard.reserve("root", "first")
+
+      // #when
+      const second = guard.reserve("root", "second")
+
+      // #then
+      expect(first.allowed).toBe(true)
+      expect(second.allowed).toBe(false)
+      if (!second.allowed) {
+        expect(second.message).toContain("rate limit")
+      }
+    })
+
+    test("blocks repeated equivalent tasks", () => {
+      // #given
+      const guard = createTaskGuard({ max_duplicate_tasks: 2 })
+      const first = guard.reserve("root", "ocr page", "Read /tmp/pages/page_15.png")
+      const second = guard.reserve("root", "ocr page", "Read /tmp/pages/page_15.png")
+
+      // #when
+      const third = guard.reserve("root", "ocr page", "Read /tmp/pages/page_15.png")
+
+      // #then
+      expect(first.allowed).toBe(true)
+      expect(second.allowed).toBe(true)
+      expect(third.allowed).toBe(false)
+      if (!third.allowed) {
+        expect(third.message).toContain("duplicate task loop")
+      }
+    })
+
+    test("does not collapse distinct numbered files", () => {
+      // #given
+      const guard = createTaskGuard({ max_duplicate_tasks: 1 })
+      const first = guard.reserve("root", "ocr page", "Read /tmp/pages/page_15.png")
+
+      // #when
+      const second = guard.reserve("root", "ocr page", "Read /tmp/pages/page_16.png")
+
+      // #then
+      expect(first.allowed).toBe(true)
+      expect(second.allowed).toBe(true)
+    })
+
+    test("chief_task blocks before creating an extra session", async () => {
+      // #given
+      const { createChiefTask } = require("./tools")
+      let created = 0
+      const mockManager = { launch: async () => ({}) }
+      const mockClient = {
+        session: {
+          create: async () => {
+            created++
+            return { data: { id: `session-${created}` } }
+          },
+          promptAsync: async () => ({ data: {} }),
+          status: async () => ({ data: {} }),
+          messages: async () => ({
+            data: [
+              {
+                info: { role: "assistant", time: { created: Date.now() } },
+                parts: [{ type: "text", text: "done" }],
+              },
+            ],
+          }),
+        },
+      }
+
+      const tool = createChiefTask({
+        manager: mockManager,
+        client: mockClient,
+        taskCircuitBreaker: { max_per_session: 1 },
+      })
+
+      const ctx = {
+        sessionID: "root",
+        messageID: "message",
+        agent: "chief",
+        abort: new AbortController().signal,
+      }
+
+      await tool.execute(
+        {
+          description: "first",
+          prompt: "Do it",
+          category: "writing",
+          run_in_background: false,
+          skills: [],
+        },
+        ctx
+      )
+
+      // #when
+      const result = await tool.execute(
+        {
+          description: "second",
+          prompt: "Do it again",
+          category: "writing",
+          run_in_background: false,
+          skills: [],
+        },
+        ctx
+      )
+
+      // #then
+      expect(created).toBe(1)
+      expect(result).toContain("Task circuit breaker")
+    })
+  })
+
   describe("DEFAULT_CATEGORIES", () => {
     test("research category has temperature only (no hardcoded model)", () => {
       // #given

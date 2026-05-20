@@ -30,25 +30,15 @@ export const AGENT_TOOLS = new Set([
 export const REMINDER_MESSAGE = `
 [Agent Usage Reminder]
 
-You called a search/fetch tool directly without leveraging specialized agents.
+You called a search/fetch tool directly.
 
-RECOMMENDED: Use chief_task with researcher/archivist agents for better results:
+Use chief_task only when the work can be split into independent, non-duplicative subtasks. Keep direct tool calls when you are already debugging one failing file, command, image, or permission issue.
 
+Good chief_task use:
 \`\`\`
-// Parallel exploration - fire multiple agents simultaneously
-chief_task(agent="researcher", prompt="Find information about topic X")
-chief_task(agent="researcher", prompt="Search for sources about Y") 
-chief_task(agent="archivist", prompt="Find related documents in knowledge base")
-
-// Then continue your work while they run in background
-// System will notify you when each completes
+chief_task(subagent_type="researcher", prompt="Find independent sources about topic X", run_in_background=true, skills=[])
+chief_task(subagent_type="archivist", prompt="Search the knowledge base for prior notes about Y", run_in_background=true, skills=[])
 \`\`\`
 
-WHY:
-- Agents can perform deeper, more thorough searches
-- Background tasks run in parallel, saving time
-- Specialized agents have domain expertise
-- Reduces context window usage in main session
-
-ALWAYS prefer: Multiple parallel chief_task calls > Direct tool calls
+Do not create more agents to retry the same failed target. After one failed attempt, inspect the concrete error, change the approach, or ask the user.
 `;

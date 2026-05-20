@@ -3,7 +3,7 @@ import { existsSync, readdirSync } from "node:fs"
 import { join } from "node:path"
 import type { BackgroundManager } from "../../features/background-agent"
 import type { ChiefTaskArgs } from "./types"
-import type { CategoryConfig, CategoriesConfig } from "../../config/schema"
+import type { CategoryConfig, CategoriesConfig, TaskCircuitBreakerConfig } from "../../config/schema"
 import { CHIEF_TASK_DESCRIPTION, DEFAULT_CATEGORIES, CATEGORY_PROMPT_APPENDS, AGENT_TO_CATEGORY_MAP } from "./constants"
 import { findNearestMessageWithFields, MESSAGE_STORAGE } from "../../features/hook-message-injector"
 import { resolveMultipleSkills } from "../../features/opencode-skill-loader/skill-content"
@@ -12,6 +12,7 @@ import { getTaskToastManager } from "../../features/task-toast-manager"
 import { subagentSessions } from "../../features/claude-code-session-state"
 import { analyzeQualityForRetry, formatFinalOutput, MAX_REWRITE_ATTEMPTS } from "./quality-feedback"
 import { log } from "../../shared/logger"
+import { createTaskGuard } from "./task-guard"
 
 type OpencodeClient = PluginInput["client"]
 
@@ -142,6 +143,7 @@ export interface ChiefTaskToolOptions {
   client: OpencodeClient
   userCategories?: CategoriesConfig
   agentModels?: Record<string, AgentModelConfig>
+  taskCircuitBreaker?: TaskCircuitBreakerConfig
 }
 
 export interface BuildSystemContentInput {
@@ -165,6 +167,7 @@ export function buildSystemContent(input: BuildSystemContentInput): string | und
 
 export function createChiefTask(options: ChiefTaskToolOptions): ToolDefinition {
   const { manager, client, userCategories, agentModels } = options
+  const guard = createTaskGuard(options.taskCircuitBreaker)
 
   return tool({
     description: CHIEF_TASK_DESCRIPTION,
@@ -378,6 +381,9 @@ ${textContent || "(No text output)"}`
       const systemContent = buildSystemContent({ skillContent, categoryPromptAppend })
 
       if (runInBackground) {
+        const reservation = guard.reserve(ctx.sessionID, args.description, args.prompt)
+        if (!reservation.allowed) return reservation.message
+
         try {
           const task = await manager.launch({
             description: args.description,
@@ -391,6 +397,7 @@ ${textContent || "(No text output)"}`
             skills: args.skills,
             skillContent: systemContent,
           })
+          reservation.commit(task.sessionID)
 
           ctx.metadata?.({
             title: args.description,
@@ -407,6 +414,7 @@ Status: ${task.status}
 
 System notifies on completion. Use \`background_output\` with task_id="${task.id}" to check.`
         } catch (error) {
+          reservation.release()
           const message = error instanceof Error ? error.message : String(error)
           return `❌ Failed to launch task: ${message}`
         }
@@ -415,6 +423,8 @@ System notifies on completion. Use \`background_output\` with task_id="${task.id
       const toastManager = getTaskToastManager()
       let taskId: string | undefined
       let syncSessionID: string | undefined
+      const reservation = guard.reserve(ctx.sessionID, args.description, args.prompt)
+      if (!reservation.allowed) return reservation.message
 
       try {
         const createResult = await client.session.create({
@@ -425,10 +435,12 @@ System notifies on completion. Use \`background_output\` with task_id="${task.id
         })
 
         if (createResult.error) {
+          reservation.release()
           return `❌ Failed to create session: ${createResult.error}`
         }
 
         const sessionID = createResult.data.id
+        reservation.commit(sessionID)
         syncSessionID = sessionID
         subagentSessions.add(sessionID)
         taskId = `sync_${sessionID.slice(0, 8)}`
@@ -555,6 +567,7 @@ Session ID: ${sessionID}
 
 ${finalOutput || "(No text output)"}`
       } catch (error) {
+        reservation.release()
         if (toastManager && taskId !== undefined) {
           toastManager.removeTask(taskId)
         }

@@ -1745,6 +1745,31 @@
         }
       }
     },
+    "task_circuit_breaker": {
+      "type": "object",
+      "properties": {
+        "max_per_session": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "max_per_minute": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 300
+        },
+        "max_depth": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 20
+        },
+        "max_duplicate_tasks": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 20
+        }
+      }
+    },
     "notification": {
       "type": "object",
       "properties": {
