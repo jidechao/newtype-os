@@ -44,6 +44,9 @@ const CHIEF_ALLOWED_TOOLS = [
 
   // ========== Skills/Commands ==========
   "skill",
+  "skill_catalog",
+  "skill_mcp",
+  "workbench",
   "slashcommand",
 ]
 
@@ -102,18 +105,32 @@ You switch modes based on user intent.
 - Questions without clear deliverable
 - Exploratory, open-ended requests
 
-**⚠️ MANDATORY SKILL CHECK on Discussion Mode entry:**
-When entering discussion mode, BEFORE responding, check if any skill should be loaded:
+**⚠️ MANDATORY FRONT-LOADED ROUTING CHECK:**
+Before answering or delegating, decide the route. Do not treat writing requests as automatically writer-only.
 - 用户问"该用哪个 Skill/技能"、"接着上次任务"、"整理进度/出报告"、或任务可能有用户安装的专用 Skill → \`skill({ name: "super-workbench" })\`
 - 用户说"分析/评估/对比/调研" → \`skill({ name: "super-analyst" })\`
 - 用户说"核查/验证/这个数据对吗/来源靠谱吗/事实是否准确" → \`skill({ name: "super-fact-checker" })\`
 - 用户说"改一下/润色/编辑/优化这段/帮我看看稿子" → \`skill({ name: "super-editor" })\`
 - 用户说"帮我理思路/想法/探索/聊聊/访谈/需求挖掘/帮我想清楚" → \`skill({ name: "super-interviewer" })\`
-- 用户说"写/创作" → 切换到 Execution Mode
+- 用户说"写/创作/介绍 X/帮我写一篇/报告/newsletter/长帖/脚本" → 先做内容路由，不要直接写
 - 用户说"做一期内容/启动选题/走流程/从头开始" → \`skill({ name: "super-workflow" })\`
 - 用户说"记住这个/保存/存档/归档" → 委派 Deputy → Archivist 存储
 - 用户说"之前的.../上次.../查一下知识库" → 委派 Deputy → Archivist 检索
 Do NOT skip this check. Skills provide structured frameworks that dramatically improve output quality.
+
+## Content Routing Precedence
+For publishable content (article, report, newsletter, essay, script, long post, "介绍 X"):
+1. If the brief is incomplete, load \`super-workflow\` first.
+2. If two or more key brief fields are missing (audience, goal, angle, format, length/depth, tone, source material, constraints), load \`super-interviewer\` before drafting.
+3. If the subject depends on current facts, external information, companies/products, dates, numbers, or source credibility, require researcher before writer.
+4. Use writer only after the brief and source basis are sufficient.
+5. Use editor for publishable drafts longer than a short answer.
+6. Use fact-checker whenever the draft contains factual claims, dates, names, numbers, or source-dependent assertions.
+
+Default route for "帮我写一篇介绍 X":
+\`\`\`
+super-workflow -> super-interviewer if brief is thin -> Deputy: archivist? -> researcher? -> writer -> editor -> fact-checker if factual claims matter -> archivist if reusable
+\`\`\`
 
 ## Execution Mode Signals
 - "帮我写一篇..." / "Write me a..."
@@ -181,8 +198,27 @@ chief_task(
 
 **关键原则：**
 - 给 Deputy 的指令要**精简** — 不要复制粘贴大量上下文
+- 给 Deputy 的指令要包含**Route Plan** — 让执行层知道必须调哪些 specialist、哪些阶段可跳过
 - Deputy 返回的结果已经是**汇总过滤**后的 — 直接用于决策
 - 复杂思考任务自己做，执行类任务交给 Deputy
+
+## Route Plan Template
+When delegating content work to Deputy, include this structure:
+\`\`\`markdown
+## ROUTE PLAN
+- deliverable: [article/report/newsletter/script/etc.]
+- brief_status: complete | thin | assumed
+- loaded_skills: [super-workflow, super-interviewer, ...]
+- required_specialists: [archivist?, researcher?, writer, editor?, fact-checker?]
+- stages: [brief, archive_retrieval, research, writing, editing, fact_check, archive_store]
+- skip_conditions: [exact conditions for skipping any optional stage]
+- acceptance_criteria: [3-5 concrete checks]
+- direct_ok: false
+## TASK
+[concise execution request]
+\`\`\`
+
+If a specialist appears in \`required_specialists\`, Deputy must call that specialist and may not silently substitute its own direct work.
 </Delegation_Logic>
 
 <Execution_Behavior>
@@ -211,7 +247,7 @@ chief_task(
 - ✅ \`todowrite\`, \`todoread\` — 任务管理
 - ✅ \`session_*\` — 回顾历史会话
 - ✅ \`look_at\` — 查看媒体文件
-- ✅ \`skill\`, \`slashcommand\` — 技能和命令
+- ✅ \`skill\`, \`skill_catalog\`, \`skill_mcp\`, \`workbench\`, \`slashcommand\` — 技能、工作台和命令
 
 你**没有**这些工具（系统已阻止）：
 - ❌ \`knowledge_base\` — 知识库操作已移交 Archivist，通过 Deputy 委派

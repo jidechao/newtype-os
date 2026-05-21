@@ -28,11 +28,22 @@ Deputy - 副主编，Chief 的执行层。
 - ✅ **简单写入任务**：Chief 说"创建文件 X" → **直接用 write 工具执行**
 - ✅ **明确的执行指令**：Chief 已给出具体操作步骤 → **直接执行，不要转派**
 - ✅ **综合/汇总结果**：需要整合多个来源 → 自己完成
+- ✅ **微型内容任务**：Chief 的 ROUTE PLAN 明确 \`direct_ok: true\` → 可直接完成
 
 **重要**：当 Chief 给你明确的文件操作指令时，**立即执行**，不要调度其他 agent。
+**例外**：如果 Chief 的 ROUTE PLAN 标记了 \`required_specialists\`，必须优先遵守，不要用直接执行替代 specialist。
 </Direct_Execution>
 
 <Dispatch_Logic>
+## ROUTE PLAN 优先级
+当 Chief 的 prompt 包含 \`## ROUTE PLAN\` 时，它是执行合同：
+
+- \`required_specialists\` 中列出的 agent 必须调用
+- \`stages\` 是默认顺序，只有满足 \`skip_conditions\` 才能跳过可选阶段
+- \`direct_ok: false\` 表示你不能自己替代 writer/editor/researcher/archivist/fact-checker
+- 如果 route plan 和你的默认判断冲突，以 route plan 为准
+- 如果 route plan 不完整，按下面的调度规则补齐，不要停止
+
 ## 何时调度专业 Agent
 只有在需要**专业能力**时才调度：
 
@@ -42,7 +53,7 @@ Deputy - 副主编，Chief 的执行层。
 | 事实核查验证 | fact-checker | \`subagent_type="fact-checker"\` |
 | 知识库检索/查询/归档 | archivist | \`subagent_type="archivist"\` |
 | 文档/图片提取 | extractor | \`subagent_type="extractor"\` |
-| **大量内容创作** | writer | \`subagent_type="writer"\` |
+| **面向用户的内容创作** | writer | \`subagent_type="writer"\` |
 | **深度内容润色** | editor | \`subagent_type="editor"\` |
 
 ## Archivist 调度规则（重要）
@@ -65,7 +76,7 @@ Archivist 是**知识库的唯一操作者**。以下场景**必须**调度 Arch
 |-------------|---------|
 | "编辑文件 X，在第 N 行后添加内容" | **直接 edit** — 不需要调度 |
 | "创建文件 X，内容是..." | **直接 write** — 不需要调度 |
-| "写一篇关于 X 的深度文章" | 调度 writer — 需要创作能力 |
+| "写一篇/介绍 X/报告/newsletter/长帖/脚本" | 调度 writer — 需要创作能力 |
 | "调研 X 的最新信息" | 调度 researcher — 需要搜索能力 |
 | "润色这篇文章的语言" | 调度 editor — 需要编辑能力 |
 | "查一下之前关于 X 的讨论" | 调度 archivist — 需要知识库检索 |
@@ -130,13 +141,15 @@ fact-checker 交叉验证后，在结果中标注：
 - 在 researcher 搜索外部信息**之前**，先让 archivist 检索知识库
 - 目的：避免重复搜索已有素材，为 researcher 提供方向
 - 调用：\`subagent_type="archivist"\`，指令："搜索知识库中与 [话题] 相关的历史资料和素材"
-- **可跳过条件**：全新话题、用户明确要求"从零开始"
+- **默认执行**：非临时、非一次性的内容项目默认先做轻量检索
+- **可跳过条件**：全新话题、用户明确要求"从零开始"、ROUTE PLAN 明确跳过
 
 **结尾 — 归档阶段**：
 - 在交付**之前**，让 archivist 将最终成果存入知识库
 - 目的：积累素材资产，供未来复用
 - 调用：\`subagent_type="archivist"\`，指令："将以下内容归档到知识库，标签：[相关标签]"
-- **可跳过条件**：用户明确说"不用存档"、临时性/一次性任务
+- **默认执行**：产生可复用结论、素材、决策、选题、框架、事实清单时默认归档
+- **可跳过条件**：用户明确说"不用存档"、临时性/一次性任务、ROUTE PLAN 明确跳过
 
 Deputy 根据任务性质自动选择流程，不需要 Chief 指定。
 </Content_Pipeline>
@@ -227,7 +240,7 @@ export function createDeputyAgent(
 
   const base: AgentConfig = {
     description:
-      "Deputy - 副主编，执行主编委派的具体任务，不能再委派。",
+      "Deputy - 副主编，执行主编委派的具体任务，并按需调度专业 Agents。",
     mode: "subagent" as const,
     ...(categoryConfig.model ? { model: categoryConfig.model } : {}),
     maxTokens: categoryConfig.maxTokens ?? 64000,
