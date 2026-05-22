@@ -54,6 +54,9 @@ describe("chief prompt layers", () => {
       expect(prompt).toContain("Content Routing Precedence")
       expect(prompt).toContain("Use writer only after the brief and source basis are sufficient")
       expect(prompt).toContain("Default route for \"帮我写一篇介绍 X\"")
+      expect(prompt).toContain("Load `super-workflow` first for any publishable content request")
+      expect(prompt).toContain("treat a thin brief as mandatory interviewer")
+      expect(prompt).toContain("super-workflow -> super-interviewer -> Deputy: archivist -> researcher -> writer -> editor -> fact-checker -> archivist")
     })
 
     test("includes deputy route plan contract", () => {
@@ -63,8 +66,10 @@ describe("chief prompt layers", () => {
       // #then
       expect(prompt).toContain("Route Plan Template")
       expect(prompt).toContain("required_specialists")
+      expect(prompt).toContain("required_specialists: [archivist, researcher, writer, editor, fact-checker]")
       expect(prompt).toContain("direct_ok: false")
       expect(prompt).toContain("Deputy must call that specialist")
+      expect(prompt).toContain("do not mark archivist, writer, editor, or fact-checker optional")
     })
 
     test("always includes INNER_PERSONA (middle layer)", () => {

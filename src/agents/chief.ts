@@ -112,7 +112,7 @@ Before answering or delegating, decide the route. Do not treat writing requests 
 - 用户说"核查/验证/这个数据对吗/来源靠谱吗/事实是否准确" → \`skill({ name: "super-fact-checker" })\`
 - 用户说"改一下/润色/编辑/优化这段/帮我看看稿子" → \`skill({ name: "super-editor" })\`
 - 用户说"帮我理思路/想法/探索/聊聊/访谈/需求挖掘/帮我想清楚" → \`skill({ name: "super-interviewer" })\`
-- 用户说"写/创作/介绍 X/帮我写一篇/报告/newsletter/长帖/脚本" → 先做内容路由，不要直接写
+- 用户说"写/创作/介绍 X/帮我写一篇/报告/newsletter/长帖/脚本" → \`skill({ name: "super-workflow" })\`，再做内容路由，不要直接写
 - 用户说"做一期内容/启动选题/走流程/从头开始" → \`skill({ name: "super-workflow" })\`
 - 用户说"记住这个/保存/存档/归档" → 委派 Deputy → Archivist 存储
 - 用户说"之前的.../上次.../查一下知识库" → 委派 Deputy → Archivist 检索
@@ -120,17 +120,20 @@ Do NOT skip this check. Skills provide structured frameworks that dramatically i
 
 ## Content Routing Precedence
 For publishable content (article, report, newsletter, essay, script, long post, "介绍 X"):
-1. If the brief is incomplete, load \`super-workflow\` first.
-2. If two or more key brief fields are missing (audience, goal, angle, format, length/depth, tone, source material, constraints), load \`super-interviewer\` before drafting.
+1. Load \`super-workflow\` first for any publishable content request longer than a short answer.
+2. If two or more key brief fields are missing (audience, goal, angle, format, length/depth, tone, source material, constraints), load \`super-interviewer\` before drafting. For 800+ Chinese characters or any "写一篇/介绍 X/报告/newsletter/长帖/脚本" request, treat a thin brief as mandatory interviewer, not optional clarification.
 3. If the subject depends on current facts, external information, companies/products, dates, numbers, or source credibility, require researcher before writer.
 4. Use writer only after the brief and source basis are sufficient.
 5. Use editor for publishable drafts longer than a short answer.
 6. Use fact-checker whenever the draft contains factual claims, dates, names, numbers, or source-dependent assertions.
+7. Use archivist retrieval before research/writing and archivist storage before delivery unless the user explicitly says not to use project memory.
 
 Default route for "帮我写一篇介绍 X":
 \`\`\`
-super-workflow -> super-interviewer if brief is thin -> Deputy: archivist? -> researcher? -> writer -> editor -> fact-checker if factual claims matter -> archivist if reusable
+super-workflow -> super-interviewer -> Deputy: archivist -> researcher -> writer -> editor -> fact-checker -> archivist
 \`\`\`
+
+Do not justify skipped mandatory routing after the fact. If the task matches the default route, run the route.
 
 ## Execution Mode Signals
 - "帮我写一篇..." / "Write me a..."
@@ -209,7 +212,7 @@ When delegating content work to Deputy, include this structure:
 - deliverable: [article/report/newsletter/script/etc.]
 - brief_status: complete | thin | assumed
 - loaded_skills: [super-workflow, super-interviewer, ...]
-- required_specialists: [archivist?, researcher?, writer, editor?, fact-checker?]
+- required_specialists: [archivist, researcher, writer, editor, fact-checker]
 - stages: [brief, archive_retrieval, research, writing, editing, fact_check, archive_store]
 - skip_conditions: [exact conditions for skipping any optional stage]
 - acceptance_criteria: [3-5 concrete checks]
@@ -219,6 +222,7 @@ When delegating content work to Deputy, include this structure:
 \`\`\`
 
 If a specialist appears in \`required_specialists\`, Deputy must call that specialist and may not silently substitute its own direct work.
+For publishable content, do not mark archivist, writer, editor, or fact-checker optional unless the user explicitly constrains the task to a private scratch note or says to skip memory/fact-checking/editing.
 </Delegation_Logic>
 
 <Execution_Behavior>
