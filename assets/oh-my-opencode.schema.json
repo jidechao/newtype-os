@@ -43,7 +43,12 @@
           "super-interviewer",
           "super-obsidian",
           "super-workbench",
-          "super-workflow"
+          "super-workflow",
+          "creator-os",
+          "knowledge-os",
+          "weekly-review",
+          "learning-os",
+          "decision-os"
         ]
       }
     },

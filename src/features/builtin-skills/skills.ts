@@ -2801,6 +2801,301 @@ skill({ name: "{skill-name}" })
 `,
 }
 
+const creatorOsSkill: BuiltinSkill = {
+  name: "creator-os",
+  description:
+    "Creator Life OS skill pack. Use for creator workflows that connect historical content assets, topic selection, content calendar decisions, cross-channel reuse, research, writing, publishing readiness, and post-publish review.",
+  template: `# Creator OS — 创作者工作系统
+
+> 个人上下文 → 选题判断 → 资料/研究 → 交付物 → 发布前检查 → 归档复用
+
+---
+
+## 适用场景
+
+- 选题池、内容日历、栏目规划、发布节奏
+- 基于过往视频脚本、Newsletter、文章、播客、草稿或素材库，判断接下来该出哪些内容
+- 把已有内容资产改造成新形态：Newsletter → 视频、长文 → 系列短内容、脚本 → 多平台发布
+- 从一个模糊想法做成文章、newsletter、长帖、脚本或报告
+- 整理素材资产、复用历史观点、避免重复研究
+- 发布前检查：事实、结构、角度、标题、行动点
+- 发布后复盘：表现、反馈、可复用素材、下一步选题
+
+## Agent 组合
+
+| 阶段 | Agent | 任务 |
+|---|---|---|
+| 上下文 | archivist | 检索历史选题、素材、观点、已发布内容和未完成草稿 |
+| 外部信息 | researcher | 补充当前事实、趋势、案例、竞品和来源 |
+| 验证 | fact-checker | 核查关键事实、数字、来源和高风险表述 |
+| 输出 | writer | 生成文章、报告、脚本、标题候选或发布清单 |
+| 质量门 | editor | 审阅结构、表达、逻辑、可读性和发布准备度 |
+| 沉淀 | archivist | 归档最终稿、选题判断、来源清单和后续线索 |
+
+## 默认流程
+
+1. 明确交付物：格式、受众、目的、长度、语气、发布渠道。
+2. 先检索内部素材；没有结果也要记录“空检索”。
+3. 需要当前事实时再调研外部信息。
+4. 涉及“接下来出什么/哪些值得做/怎么排序”时，叠加 \`super-analyst\` 做判断框架。
+5. 生成前先定角度和结构，不直接开写。
+6. 草稿完成后至少过一轮 editor；含事实声明则过 fact-checker。
+7. 最终把可复用结论、来源、标题、结构和后续选题归档。
+
+## ROUTE PLAN 模板
+
+\`\`\`markdown
+## ROUTE PLAN
+- deliverable: [article/newsletter/thread/script/report/content-calendar/review]
+- brief_status: complete | thin | assumed
+- loaded_skills: [creator-os, super-analyst, ...]
+- required_specialists: [archivist, researcher, writer, editor, fact-checker]
+- specialist_skills: { writer: [super-writer], editor: [super-editor], fact-checker: [super-fact-checker] }
+- stages: [archive_retrieval, strategy_analysis, research, angle, drafting, editing, fact_check, archive_store]
+- skip_conditions: [only skip researcher/fact-checker when no current or factual claims; only skip archive when user explicitly says not to use memory]
+- acceptance_criteria: [clear angle, source-backed claims, channel-appropriate format, reusable archive]
+- direct_ok: false
+## TASK
+[concise execution request]
+\`\`\`
+
+## 输出要求
+
+- 先给可执行结论，不展示完整内部流程。
+- 明确哪些材料来自记忆、哪些来自外部研究、哪些是假设。
+- 对发布型内容，交付最终稿时附 3-5 条发布前检查项。
+`,
+  metadata: {
+    pack: "life-os",
+    domain: "creator",
+  },
+}
+
+const knowledgeOsSkill: BuiltinSkill = {
+  name: "knowledge-os",
+  description:
+    "Knowledge Life OS skill pack. Use for reading digestion, Obsidian or .opencode knowledge organization, source intake, note synthesis, archive cleanup, and connecting ideas across memory.",
+  template: `# Knowledge OS — 知识管理系统
+
+> 摄取资料 → 提取结构 → 连接旧知识 → 生成摘要/索引 → 归档复用
+
+---
+
+## 适用场景
+
+- 阅读摘要、长文/PDF/网页资料消化
+- Obsidian vault 或 \`.opencode/knowledge/\` 整理
+- 把零散笔记合并成索引、主题地图、知识卡片
+- 查找历史材料之间的联系、矛盾和缺口
+- 将临时成果变成可复用知识资产
+
+## Agent 组合
+
+| 阶段 | Agent | 任务 |
+|---|---|---|
+| 摄取 | extractor | 从 PDF、图片、网页、文档、表格提取干净材料 |
+| 检索 | archivist | 搜索 memory/archive/knowledge，找直接材料和相关连接 |
+| 补充 | researcher | 只在需要当前事实、外部背景或来源补齐时调用 |
+| 组织 | writer | 生成摘要、索引、知识卡片、主题地图或行动清单 |
+| 审阅 | editor | 检查结构、命名、可检索性和复用价值 |
+| 归档 | archivist | 保存到合适知识目录，带标签、来源和后续线索 |
+
+## 默认输出形态
+
+- 阅读摘要：核心观点、证据、可疑点、可行动用法。
+- 主题索引：概念、相关笔记、反向链接、缺口。
+- 知识卡片：定义、背景、例子、关联、来源。
+- 项目知识：决策、理由、约束、下一步、参考材料。
+
+## 规则
+
+- 不把摘录当理解：必须提炼结构和用途。
+- 不把归档当堆文件：每次归档都说明未来如何检索。
+- 遇到 Obsidian vault 时优先加载 \`super-obsidian\`。
+- 涉及当前事实或争议时，先 researcher，再 fact-checker。
+`,
+  metadata: {
+    pack: "life-os",
+    domain: "knowledge",
+  },
+}
+
+const weeklyReviewSkill: BuiltinSkill = {
+  name: "weekly-review",
+  description:
+    "Weekly review Life OS skill pack. Use for weekly review, project status synthesis, goal check-in, next-week planning, decision capture, and personal operating rhythm.",
+  template: `# Weekly Review — 周复盘与下周计划
+
+> 近期记录 → 项目状态 → 决策/阻塞 → 下周重点 → 归档跟踪
+
+---
+
+## 适用场景
+
+- “帮我做周复盘”
+- “整理这周做了什么”
+- “下周怎么安排”
+- “看看最近项目推进到哪了”
+- “把这周的决定和待办归档”
+
+## 默认流程
+
+1. 让 archivist 检索近期 memory、archive、knowledge 和相关项目材料。
+2. 如果用户给了本周记录，先 extractor/archivist 结构化输入。
+3. writer 生成复盘：完成、进展、阻塞、决策、风险、下周重点。
+4. editor 审阅可执行性：重点是否过多、下一步是否具体、阻塞是否有 owner。
+5. archivist 归档最终复盘、关键决策和下周承诺。
+
+## 输出结构
+
+\`\`\`markdown
+# Weekly Review
+
+## 本周事实
+- ...
+
+## 关键进展
+- ...
+
+## 卡住的问题
+- ...
+
+## 做过的决定
+- ...
+
+## 下周 3 个重点
+1. ...
+2. ...
+3. ...
+
+## 需要跟进
+- [ ] ...
+\`\`\`
+
+## 规则
+
+- 不要编造用户没有提供、记忆也没有检索到的事实。
+- 不要给超过 3 个下周重点，除非用户明确要求。
+- 区分“事实”“判断”“建议”。
+- 复盘不是写漂亮总结，目标是让下周行动更清楚。
+`,
+  metadata: {
+    pack: "life-os",
+    domain: "review",
+  },
+}
+
+const learningOsSkill: BuiltinSkill = {
+  name: "learning-os",
+  description:
+    "Learning Life OS skill pack. Use for learning paths, study plans, source selection, note digestion, spaced review, practice tasks, and progress checkpoints.",
+  template: `# Learning OS — 学习系统
+
+> 目标 → 当前水平 → 资料筛选 → 学习路径 → 练习/复习 → 阶段检查
+
+---
+
+## 适用场景
+
+- 制定学习路线、课程计划、阅读计划
+- 消化一本书、一篇论文、一组资料
+- 把资料转成笔记、练习题、复习卡片
+- 判断该学什么、不该学什么
+- 阶段性检查学习进度
+
+## Agent 组合
+
+| 阶段 | Agent | 任务 |
+|---|---|---|
+| 资料摄取 | extractor | 处理书摘、PDF、课程大纲、网页、笔记 |
+| 外部资料 | researcher | 找权威资料、课程、文档、实践项目 |
+| 个人上下文 | archivist | 检索已有笔记、学习记录、偏好和历史卡点 |
+| 计划/材料 | writer | 生成学习路线、复习计划、练习题、摘要 |
+| 审阅 | editor | 检查难度梯度、可执行性、节奏和遗漏 |
+
+## 输出形态
+
+- 学习路线：目标、阶段、材料、练习、验收标准。
+- 阅读消化：摘要、关键概念、问题清单、实践用法。
+- 复习计划：复习频率、卡片主题、测试题、薄弱点。
+- 阶段检查：已掌握、未掌握、下一步。
+
+## 规则
+
+- 先问或假设当前水平，不要直接给满配路线。
+- 资料宁可少而权威，不要堆链接。
+- 每个阶段必须有可验证产出。
+- 不把学习计划写成愿望清单；要有时间、练习和检查点。
+`,
+  metadata: {
+    pack: "life-os",
+    domain: "learning",
+  },
+}
+
+const decisionOsSkill: BuiltinSkill = {
+  name: "decision-os",
+  description:
+    "Decision Life OS skill pack. Use for tool selection, purchase decisions, project tradeoffs, career choices, prioritization, and risk-aware recommendations.",
+  template: `# Decision OS — 决策系统
+
+> 问题定义 → 选项 → 标准 → 事实验证 → 取舍 → 建议 → 决策记录
+
+---
+
+## 适用场景
+
+- “A 和 B 该选哪个”
+- “这个东西值不值得买”
+- “这个项目要不要做”
+- “优先级怎么排”
+- “职业/学习/工具/产品选择”
+
+## Agent 组合
+
+| 阶段 | Agent | 任务 |
+|---|---|---|
+| 个人上下文 | archivist | 检索用户偏好、历史决策、约束和长期目标 |
+| 外部信息 | researcher | 搜集选项、价格、能力、评价、限制和替代方案 |
+| 验证 | fact-checker | 核查关键事实、价格、功能、风险和来源质量 |
+| 建议 | writer | 生成对比、结论、行动建议和备选路径 |
+| 审阅 | editor | 检查标准是否一致、逻辑是否成立、建议是否可执行 |
+
+## 输出结构
+
+\`\`\`markdown
+## 结论
+[明确推荐，或说明为什么暂不决策]
+
+## 判断标准
+- ...
+
+## 选项对比
+| 选项 | 优点 | 缺点 | 风险 | 适合条件 |
+|---|---|---|---|---|
+
+## 我会怎么选
+[基于已知约束的建议]
+
+## 需要确认的信息
+- ...
+
+## 下一步
+1. ...
+\`\`\`
+
+## 边界
+
+- 高风险医疗、法律、投资建议：只能整理信息、风险和需要咨询专业人士的问题，不替用户做最终决定。
+- 涉及当前价格、产品能力、政策、公司状态时，必须 researcher + fact-checker。
+- 如果个人偏好/预算/时间/风险承受度缺失，先假设并标明，或问一个阻塞问题。
+`,
+  metadata: {
+    pack: "life-os",
+    domain: "decision",
+  },
+}
+
 const superObsidianSkill: BuiltinSkill = {
   name: "super-obsidian",
   description:
@@ -3006,6 +3301,11 @@ export function createBuiltinSkills(): BuiltinSkill[] {
     superFactCheckerSkill,
     superEditorSkill,
     superInterviewerSkill,
+    creatorOsSkill,
+    knowledgeOsSkill,
+    weeklyReviewSkill,
+    learningOsSkill,
+    decisionOsSkill,
     superObsidianSkill,
   ];
 }

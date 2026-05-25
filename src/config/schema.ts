@@ -36,6 +36,11 @@ export const BuiltinSkillNameSchema = z.enum([
   "super-obsidian",
   "super-workbench",
   "super-workflow",
+  "creator-os",
+  "knowledge-os",
+  "weekly-review",
+  "learning-os",
+  "decision-os",
 ]);
 
 export const OverridableAgentNameSchema = z.enum([

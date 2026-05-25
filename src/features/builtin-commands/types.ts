@@ -13,6 +13,11 @@ export type BuiltinCommandName =
   | "super-obsidian"
   | "super-workbench"
   | "super-workflow"
+  | "creator-os"
+  | "knowledge-os"
+  | "weekly-review"
+  | "learning-os"
+  | "decision-os"
   | "memory-consolidate"
   | "configure-models"
   | "init-soul";

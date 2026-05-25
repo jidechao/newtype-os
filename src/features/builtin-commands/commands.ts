@@ -148,6 +148,71 @@ $ARGUMENTS
 </user-request>`,
     argumentHint: "<task, skill selection, restore, or report request>",
   },
+  "creator-os": {
+    description: "(builtin) Creator Life OS: historical content assets, topic selection, content calendars, cross-channel reuse, and publishing review",
+    template: `<command-instruction>
+Use the skill tool to load the creator-os skill, then follow its instructions.
+
+Call: skill({ name: "creator-os" })
+</command-instruction>
+
+<user-request>
+$ARGUMENTS
+</user-request>`,
+    argumentHint: "<creator workflow, content system, or publishing task>",
+  },
+  "knowledge-os": {
+    description: "(builtin) Knowledge Life OS: reading digestion, note synthesis, archive cleanup, and idea connections",
+    template: `<command-instruction>
+Use the skill tool to load the knowledge-os skill, then follow its instructions.
+
+Call: skill({ name: "knowledge-os" })
+</command-instruction>
+
+<user-request>
+$ARGUMENTS
+</user-request>`,
+    argumentHint: "<knowledge base, reading, note, or archive task>",
+  },
+  "weekly-review": {
+    description: "(builtin) Weekly review: status synthesis, goal check-in, next-week plan, and decision capture",
+    template: `<command-instruction>
+Use the skill tool to load the weekly-review skill, then follow its instructions.
+
+Call: skill({ name: "weekly-review" })
+</command-instruction>
+
+<user-request>
+$ARGUMENTS
+</user-request>`,
+    argumentHint: "<weekly review or project status request>",
+  },
+  "learning-os": {
+    description: "(builtin) Learning Life OS: learning paths, study plans, source selection, and review checkpoints",
+    template: `<command-instruction>
+Use the skill tool to load the learning-os skill, then follow its instructions.
+
+Call: skill({ name: "learning-os" })
+</command-instruction>
+
+<user-request>
+$ARGUMENTS
+</user-request>`,
+    argumentHint: "<learning goal, source, or study plan>",
+  },
+  "decision-os": {
+    description: "(builtin) Decision Life OS: options, tradeoffs, evidence, risks, and recommendation memos",
+    template: `<command-instruction>
+Use the skill tool to load the decision-os skill, then follow its instructions.
+
+Call: skill({ name: "decision-os" })
+</command-instruction>
+
+<user-request>
+$ARGUMENTS
+</user-request>`,
+    argumentHint: "<decision, options, or tradeoff>",
+  },
   "super-workflow": {
     description:
       "(builtin) Scaled content workflow with quality gates for non-trivial work",

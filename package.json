@@ -1,7 +1,7 @@
 {
   "name": "@newtype-os/plugin",
   "version": "0.0.30",
-  "description": "AI Agent Collaboration System for Content Creation - Based on oh-my-opencode",
+  "description": "AI Agent Collaboration System for Creator Life OS - OpenCode plugin",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",

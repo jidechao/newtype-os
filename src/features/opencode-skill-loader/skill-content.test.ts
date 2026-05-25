@@ -30,6 +30,36 @@ describe("resolveSkillContent", () => {
 		// #then: returns null
 		expect(result).toBeNull()
 	})
+
+	it("should resolve Life OS skill packs", () => {
+		// #given: first Life OS builtin skill packs
+		const cases = [
+			["creator-os", "Creator OS"],
+			["knowledge-os", "Knowledge OS"],
+			["weekly-review", "Weekly Review"],
+			["learning-os", "Learning OS"],
+			["decision-os", "Decision OS"],
+		]
+
+		// #when / #then
+		for (const [name, title] of cases) {
+			const result = resolveSkillContent(name)
+			expect(result).not.toBeNull()
+			expect(result).toContain(title)
+		}
+	})
+
+	it("should describe creator strategy from historical assets", () => {
+		// #when
+		const result = resolveSkillContent("creator-os")
+
+		// #then
+		expect(result).not.toBeNull()
+		expect(result).toContain("基于过往视频脚本、Newsletter、文章、播客、草稿或素材库")
+		expect(result).toContain("Newsletter → 视频")
+		expect(result).toContain("叠加 `super-analyst` 做判断框架")
+		expect(result).toContain("strategy_analysis")
+	})
 })
 
 describe("resolveMultipleSkills", () => {
