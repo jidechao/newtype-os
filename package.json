@@ -45,12 +45,12 @@
   "license": "SUL-1.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/newtype-01/newtype-profile.git"
+    "url": "git+https://github.com/newtype-01/newtype-os.git"
   },
   "bugs": {
-    "url": "https://github.com/newtype-01/newtype-profile/issues"
+    "url": "https://github.com/newtype-01/newtype-os/issues"
   },
-  "homepage": "https://github.com/newtype-01/newtype-profile#readme",
+  "homepage": "https://github.com/newtype-01/newtype-os#readme",
   "dependencies": {
     "@ast-grep/cli": "^0.40.0",
     "@ast-grep/napi": "^0.40.0",
