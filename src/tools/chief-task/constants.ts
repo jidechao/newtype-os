@@ -221,6 +221,12 @@ Dispatch to specialist agents:
 - resume: Session ID to continue previous conversation
 - skills: Array of skill names to prepend. Use [] if none.
 
+## Skill Propagation
+- skills are injected only into the agent session created by this specific chief_task call.
+- skills do not automatically propagate from Deputy to writer/editor/researcher/etc.
+- when a route plan specifies downstream skills, Deputy must pass them again in the specialist chief_task call, e.g. writer with skills=["super-writer"], editor with skills=["super-editor"].
+- Deputy should report which skills each specialist actually received.
+
 ## Resume Usage
 - Task failed → resume with "fix: [specific issue]"
 - Follow-up needed → resume with additional question

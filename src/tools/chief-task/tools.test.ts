@@ -270,6 +270,13 @@ describe("chief-task", () => {
       expect(CHIEF_TASK_DESCRIPTION).toContain("researcher")
       expect(CHIEF_TASK_DESCRIPTION).toContain("writer")
     })
+
+    test("documents explicit downstream skill propagation", () => {
+      // #given / #when / #then
+      expect(CHIEF_TASK_DESCRIPTION).toContain("Skill Propagation")
+      expect(CHIEF_TASK_DESCRIPTION).toContain("do not automatically propagate")
+      expect(CHIEF_TASK_DESCRIPTION).toContain("skills=[\"super-writer\"]")
+    })
   })
 
   describe("resolveCategoryConfig", () => {

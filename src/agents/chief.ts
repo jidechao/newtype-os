@@ -213,6 +213,7 @@ When delegating content work to Deputy, include this structure:
 - brief_status: complete | thin | assumed
 - loaded_skills: [super-workflow, super-interviewer, ...]
 - required_specialists: [archivist, researcher, writer, editor, fact-checker]
+- specialist_skills: { writer: [super-writer], editor: [super-editor], fact-checker: [super-fact-checker] }
 - stages: [brief, archive_retrieval, research, writing, editing, fact_check, archive_store]
 - skip_conditions: [exact conditions for skipping any optional stage]
 - acceptance_criteria: [3-5 concrete checks]
@@ -222,6 +223,7 @@ When delegating content work to Deputy, include this structure:
 \`\`\`
 
 If a specialist appears in \`required_specialists\`, Deputy must call that specialist and may not silently substitute its own direct work.
+Skills loaded for Deputy do not automatically reach specialist sessions. Put every required downstream skill in \`specialist_skills\`; Deputy must pass those skills again when calling the specialist.
 For publishable content, do not mark archivist, writer, editor, or fact-checker optional unless the user explicitly constrains the task to a private scratch note or says to skip memory/fact-checking/editing.
 </Delegation_Logic>
 
