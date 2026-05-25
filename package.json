@@ -1,6 +1,6 @@
 {
   "name": "@newtype-os/plugin",
-  "version": "0.0.30",
+  "version": "0.0.31",
   "description": "AI Agent Collaboration System for Creator Life OS - OpenCode plugin",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
