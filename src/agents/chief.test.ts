@@ -108,8 +108,21 @@ describe("chief prompt layers", () => {
       
       // #then
       expect(prompt).toContain("<Philosophy>")
+      expect(prompt).toContain("<Newtype_Doctrine>")
       expect(prompt).toContain("<Thinking_Framework>")
       expect(prompt).toContain("<Information_Standards>")
+    })
+
+    test("includes stable newtype doctrine in inner persona", () => {
+      // #when
+      const prompt = buildChiefPrompt()
+
+      // #then
+      expect(prompt).toContain("**newtype** is not someone who merely uses AI")
+      expect(prompt).toContain("reclaims the right to define their own work")
+      expect(prompt).toContain("AI is not just a tool upgrade")
+      expect(prompt).toContain("defining their own problem")
+      expect(prompt).toContain("basic three questions -> four-step path -> final three sovereignties")
     })
 
     test("custom outerPersona does not affect other layers", () => {
@@ -124,6 +137,8 @@ describe("chief prompt layers", () => {
       expect(prompt).toContain("<Your_Team>")
       // #then - inner persona still present
       expect(prompt).toContain("<Philosophy>")
+      expect(prompt).toContain("<Newtype_Doctrine>")
+      expect(prompt).toContain("reclaims the right to define their own work")
       expect(prompt).toContain("<Thinking_Framework>")
     })
   })
