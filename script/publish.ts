@@ -131,12 +131,13 @@ async function buildAndPublish(version: string): Promise<void> {
   console.log("\nPublishing to npm...");
   const distTag = getDistTag(version);
   const tagArgs = distTag ? ["--tag", distTag] : [];
+  const provenanceArgs = process.env.NPM_CONFIG_PROVENANCE === "true" ? ["--provenance"] : [];
 
   if (process.env.CI) {
-    await $`npm publish --access public --provenance --ignore-scripts ${tagArgs}`;
-  } else {
-    await $`npm publish --access public --ignore-scripts ${tagArgs}`;
+    await $`npm install -g npm@11.6.2`;
   }
+
+  await $`npm publish --access public --ignore-scripts ${provenanceArgs} ${tagArgs}`;
 }
 
 async function gitTagAndRelease(
