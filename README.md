@@ -4,24 +4,37 @@
 
 # newtype OS
 
-**Multi-Agent Content Team — a multi-agent orchestration system built for content production**
+**An AI content team for research, writing, editing, and knowledge work.**
 
 Created by [huangyihe](https://x.com/huangyihe).
 
 <p>
-  <a href="https://www.npmjs.com/package/@newtype-os/cli"><img src="https://img.shields.io/npm/v/@newtype-os/cli?label=%40newtype-os%2Fcli" /></a>
-  <a href="https://www.npmjs.com/package/@newtype-os/plugin"><img src="https://img.shields.io/npm/v/@newtype-os/plugin?label=%40newtype-os%2Fplugin" /></a>
+  <a href="https://github.com/newtype-01/newtype-os/releases/download/workstation-v0.2.0-beta.2/newtype-workstation-mac-arm64.dmg"><strong>Download newtype Workstation</strong></a>
+  ·
+  <a href="#newtype-cli"><strong>Install newtype CLI</strong></a>
+  ·
+  <a href="#opencode-plugin"><strong>Use the open-source plugin</strong></a>
 </p>
 
----
+<p>
+  <a href="https://www.npmjs.com/package/@newtype-os/cli"><img src="https://img.shields.io/npm/v/@newtype-os/cli?label=%40newtype-os%2Fcli" alt="@newtype-os/cli version" /></a>
+  <a href="https://www.npmjs.com/package/@newtype-os/plugin"><img src="https://img.shields.io/npm/v/@newtype-os/plugin?label=%40newtype-os%2Fplugin" alt="@newtype-os/plugin version" /></a>
+  <img src="https://img.shields.io/badge/plugin-maintenance%20mode-6b7280" alt="Plugin maintenance mode" />
+</p>
 
-## What is this
+> **Which version should I use?**
+>
+> - **Apple Silicon Mac:** choose **newtype Workstation** for the complete native workspace.
+> - **Windows, Linux, Intel Mac, or terminal-first workflows:** choose **newtype CLI**.
+> - **Existing OpenCode users:** use the open-source **`@newtype-os/plugin`** compatibility edition.
 
-At its core, newtype OS is an **8-agent multi-layer orchestration system** equipped with specialized skills and a memory system, purpose-built for content production.
+> **Repository scope:** This repository contains the open-source `@newtype-os/plugin` code and hosts official newtype Workstation release binaries. The source code for newtype Workstation and the integrated CLI is not included here.
 
-Think of it as **a content team living in your terminal**. The Chief (Editor-in-Chief) talks to you, breaks down requirements; the Deputy dispatches execution; 6 specialists each handle their domain — research, fact-checking, retrieval, extraction, writing, and editing.
+## What is newtype OS?
 
-```
+newtype OS is an **8-agent, multi-layer orchestration system built for content production**. Think of it as a content team that can research, verify, retrieve, extract, write, and edit alongside you.
+
+```text
 You ↔ Chief (Editor-in-Chief)
           ↓
       Deputy (Deputy Editor)
@@ -29,63 +42,54 @@ You ↔ Chief (Editor-in-Chief)
       Researcher · Fact-Checker · Archivist · Extractor · Writer · Editor
 ```
 
-## Comparison
+You work with Chief. Chief clarifies the goal and coordinates the specialists required for the task.
 
-|                 | newtype Workstation                         | @newtype-os/cli                  | @newtype-os/plugin           |
-| --------------- | ------------------------------------------- | -------------------------------- | ---------------------------- |
-| **Nature**      | Native Mac content workspace                | Standalone terminal app          | OpenCode plugin              |
-| **Install**     | Download the DMG                            | `npm install -g @newtype-os/cli` | `bun add @newtype-os/plugin` |
-| **Requires**    | Apple Silicon, macOS 11.5 or later          | Self-contained, no dependencies  | OpenCode                     |
-| **Launch**      | Applications → newtype Workstation          | `nt`                             | `opencode`                   |
-| **Config dir**  | `~/.config/newtype/`                        | `~/.config/newtype/`             | `~/.config/opencode/`        |
-| **Project dir** | `.newtype/`                                 | `.newtype/`                      | `.opencode/`                 |
+## Choose your version
 
-### Key Differences
+| Product | Best for | Development status | Source in this repository |
+| --- | --- | --- | --- |
+| **newtype Workstation** | Apple Silicon Mac users who want a native content workspace | Active development | No |
+| **newtype CLI** | Cross-platform and terminal-first users | Active development | No |
+| **OpenCode plugin** | Existing OpenCode users | Maintenance mode | Yes |
 
-`@newtype-os/cli` isn't "OpenCode with a plugin bolted on." It integrates OpenCode as its core engine and ships as a standalone product. You install it, run `nt`, and the full 8-agent team is ready. `@newtype-os/plugin`, on the other hand, is a standard OpenCode plugin that adds the same agent team to an existing OpenCode installation.
+The products share the same newtype agent-team lineage, but they are no longer presented as permanently feature-identical. New product development is focused on newtype Workstation and newtype CLI. The OpenCode plugin remains available for existing users and receives necessary compatibility, security, and critical fixes.
 
-The CLI operates in its own configuration namespace: `~/.config/newtype/` for global config, `.newtype/` for project-level files. This is completely separate from OpenCode's `~/.config/opencode/` and `.opencode/`. Installing the CLI won't touch your existing OpenCode setup, and it won't interfere with any OpenCode plugins you already have installed (such as oh-my-opencode). The two coexist without conflict.
+## Install
 
-From a feature standpoint, both versions deliver the same experience. The 8-agent team, built-in skills, memory system, CLI commands, and MCP integrations are identical regardless of which version you pick. You're not giving anything up by choosing one over the other.
+### newtype Workstation
 
-If you want a self-contained setup that works out of the box, or if you already run other OpenCode plugins and prefer clean separation, go with the CLI. If you're already an OpenCode user and simply want to add the newtype agent team to your existing workflow, the plugin is the lighter-weight option.
+A native Mac content workspace with a project file tree, Markdown editing and preview, and the newtype OS agent interface built into the right sidebar.
 
-newtype Workstation currently supports Apple Silicon Macs only. The CLI supports macOS (Apple Silicon / Intel), Linux (x64 / ARM64), and Windows (x64).
+[**Download newtype Workstation 0.2.0 Beta 2 for Apple Silicon**](https://github.com/newtype-01/newtype-os/releases/download/workstation-v0.2.0-beta.2/newtype-workstation-mac-arm64.dmg)
 
-## Installation & Usage
+Requirements: Apple Silicon (M1 or later) and macOS 11.5 or later.
 
-newtype OS is designed for both humans and agents.
+> This is an unsigned, unnotarized beta for early testing. After trying to open it once, macOS may require you to choose **Open Anyway** in **System Settings → Privacy & Security**. Download it only from this GitHub repository and verify the SHA-256 published with the release.
 
-### For Humans
-
-#### Option 1: newtype Workstation for Mac (Unsigned Beta)
-
-A native content workspace with a project file tree, Markdown editing and preview, and the full newtype OS TUI built into the right sidebar.
-
-[Download newtype Workstation 0.2.0 Beta 2 for Apple Silicon](https://github.com/newtype-01/newtype-os/releases/download/workstation-v0.2.0-beta.2/newtype-workstation-mac-arm64.dmg)
-
-Requirements: Apple Silicon (M1 or later) and macOS 11.5 or later. Intel Macs are not supported yet.
-
-> This is an unsigned, unnotarized beta for early testing. After trying to open it once, macOS may require you to choose **Open Anyway** in **System Settings → Privacy & Security**. Download it only from this GitHub Release and verify the published SHA-256.
-
-Open the downloaded DMG and drag `newtype Workstation` into the Applications folder. The app and the CLI share the same project files, `.newtype/` data, and `~/.config/newtype/` configuration. Automatic updates are not enabled for this beta.
+Open the DMG and drag `newtype Workstation` into Applications. Automatic updates are not enabled for this beta.
 
 [View Workstation release history](https://github.com/newtype-01/newtype-os/releases?q=workstation-v)
 
-> This repository hosts newtype Workstation release binaries and update files. Its source tree is the open-source `@newtype-os/plugin`; the Workstation source code is not included here.
+### newtype CLI
 
-#### Option 2: newtype CLI
-
-A ready-to-use terminal AI assistant with the full agent team built in.
+A self-contained, cross-platform terminal application with the full newtype agent team.
 
 ```bash
 npm install -g @newtype-os/cli
-
-# Launch the TUI
 nt
 ```
 
-#### Option 3: As an OpenCode Plugin
+The CLI uses `~/.config/newtype/` for global configuration and `.newtype/` for project data. It does not modify your OpenCode configuration.
+
+To teach supported AI coding tools how to invoke newtype commands:
+
+```bash
+nt init
+```
+
+Supported tools include Claude Code, Cursor, Copilot, Windsurf, Cline, Roo Code, Zed, Goose, and Amazon Q.
+
+### OpenCode plugin
 
 If you already use [OpenCode](https://github.com/anomalyco/opencode):
 
@@ -94,7 +98,7 @@ cd ~/.config/opencode
 bun add @newtype-os/plugin
 ```
 
-Edit `~/.config/opencode/opencode.json`:
+Add the plugin to `~/.config/opencode/opencode.json`:
 
 ```json
 {
@@ -102,186 +106,61 @@ Edit `~/.config/opencode/opencode.json`:
 }
 ```
 
-### For Agents
+The plugin uses OpenCode's `~/.config/opencode/` and `.opencode/` namespaces.
 
-After installing newtype CLI, the system ships with a full set of CLI commands (`nt research`, `nt write`, `nt pipeline`, etc.) designed specifically for agent invocation.
+See the [plugin guide](./docs/plugin-guide.md) for configuration and development details. Read the [maintenance policy](./MAINTENANCE.md) before proposing substantial plugin features.
 
-Run `nt init` and newtype will automatically detect locally installed AI development tools and inject skill files, teaching agents how to use these CLI commands:
+## The agent team
 
-```bash
-npm install -g @newtype-os/cli
-nt init
-```
+| Agent | Role | Responsibility |
+| --- | --- | --- |
+| **Chief** | Editor-in-Chief | Thought partner and primary task coordinator |
+| **Deputy** | Deputy Editor | Dispatches execution to the specialist team |
+| **Researcher** | Researcher | External research and trend discovery |
+| **Fact-Checker** | Verifier | Claim verification and source assessment |
+| **Archivist** | Archivist | Internal knowledge retrieval and correlation |
+| **Extractor** | Extractor | Extracts content from documents, images, and web pages |
+| **Writer** | Writer | Produces structured drafts from goals and materials |
+| **Editor** | Editor | Improves logic, clarity, tone, and consistency |
 
-Supported tools: Claude Code, Cursor, Copilot, Windsurf, Cline, Roo Code, Zed, Goose, Amazon Q, and more.
+## Core capabilities
 
-Once injected, these agents know when and how to call `nt research`, `nt pipeline`, and other commands to augment their own capabilities.
+- Multi-agent research, writing, fact-checking, and editing
+- Specialized content-production skills and quality gates
+- Automatic session summaries and long-term memory
+- Project knowledge-base initialization and retrieval
+- Configurable models for individual agents
+- Command-line workflows for both humans and agents
+- Optional MCP integrations
 
-## Configuration
+Detailed CLI, orchestration, and skill documentation:
 
-### Connect Model Providers
+- [CLI guide](./docs/cli-guide.md)
+- [Orchestration guide](./docs/orchestration-guide.md)
+- [Category and skill guide](./docs/category-skill-guide.md)
+- [OpenCode plugin guide](./docs/plugin-guide.md)
 
-Use the `/connect` command in the TUI to connect model providers (75+ supported), or via CLI:
+## Maintenance and contributions
 
-```bash
-nt auth login
-```
+`@newtype-os/plugin` is in **maintenance mode**. We welcome focused compatibility, security, documentation, and critical bug fixes. New product development is concentrated in newtype Workstation and newtype CLI.
 
-### Configure Agent Models
+Before opening a pull request, read:
 
-**Option 1**: Use the `/agent-models` command in the TUI to configure models for each agent through the interface.
+- [Maintenance policy](./MAINTENANCE.md)
+- [Contributing guide](./CONTRIBUTING.md)
 
-**Option 2**: Edit the config file directly.
+## Project history
 
-- newtype CLI: `~/.config/newtype/newtype-profile.json`
-- OpenCode plugin: `~/.config/opencode/newtype-profile.json`
-
-```json
-{
-  "agents": {
-    "chief": { "model": "your-preferred-model" },
-    "deputy": { "model": "your-preferred-model" },
-    "researcher": { "model": "your-preferred-model" },
-    "writer": { "model": "your-preferred-model", "temperature": 0.7 }
-  }
-}
-```
-
-All 8 agents can be configured with independent models and parameters.
-
-### Customize Chief's Personality
-
-Create `.newtype/SOUL.md` (or `.opencode/SOUL.md` for the OpenCode plugin) to customize Chief's communication style:
-
-```bash
-/init-soul  # Generate default template
-```
-
-### Disable Features
-
-```json
-{
-  "disabled_agents": ["fact-checker"],
-  "disabled_skills": ["super-analyst"],
-  "disabled_hooks": ["memory-system"],
-  "disabled_mcps": ["sequential-thinking"]
-}
-```
-
-## Features
-
-### Agent Team
-
-| Agent            | Role            | Responsibility                                             |
-| ---------------- | --------------- | ---------------------------------------------------------- |
-| **Chief**        | Editor-in-Chief | Your entry point — thought partner + task coordinator      |
-| **Deputy**       | Deputy Editor   | Chief's execution layer, dispatches downstream specialists |
-| **Researcher**   | Researcher      | External intelligence gathering, trend discovery           |
-| **Fact-Checker** | Verifier        | Fact verification, source credibility assessment           |
-| **Archivist**    | Archivist       | Internal knowledge base retrieval and correlation          |
-| **Extractor**    | Extractor       | PDF/image/web content extraction to Markdown               |
-| **Writer**       | Writer          | Transforms materials into structured first drafts          |
-| **Editor**       | Editor          | Language polish, logic strengthening, style consistency    |
-
-**You only interact with Chief.** Chief automatically dispatches other agents as needed.
-
-### Built-in Skills & MCP Servers
-
-Agents auto-load the corresponding skill framework when executing tasks:
-
-| Skill                  | Command               | Description                                                                 |
-| ---------------------- | --------------------- | --------------------------------------------------------------------------- |
-| **Super Workflow**     | `/super-workflow`     | Scaled content workflow with quality gates for non-trivial work             |
-| **Super Analyst**      | `/super-analyst`      | Decision analysis, structured research, and framework selection             |
-| **Super Writer**       | `/super-writer`       | Content drafting with lightweight methodology and style control             |
-| **Super Fact-Checker** | `/super-fact-checker` | Claim extraction, verification, source assessment, and corrections          |
-| **Super Editor**       | `/super-editor`       | Edit existing content and explain material changes                          |
-| **Super Interviewer**  | `/super-interviewer`  | Thought clarification, requirement discovery, and Socratic questioning      |
-| **Super Obsidian**     | `/super-obsidian`     | Obsidian CLI-first vault operations: search, read, create, and manage notes |
-
-Super Workflow is the orchestration layer that governs the entire content lifecycle — it defines *when* to do *what* and *how* to verify quality at each stage. Super Writer and Super Editor provide the professional techniques for execution. Chief auto-loads the relevant skill when a task calls for a structured framework. You can also trigger them manually via slash commands. Super Obsidian is auto-loaded when an Obsidian vault (`.obsidian/` directory) is detected.
-
-| MCP                     | Default  | Config             |
-| ----------------------- | -------- | ------------------ |
-| **websearch** (Exa)     | Enabled  | None required      |
-| **sequential-thinking** | Enabled  | None required      |
-| **tavily**              | Disabled | Requires `api_key` |
-| **firecrawl**           | Disabled | Requires `api_key` |
-
-### CLI Commands
-
-Beyond the TUI, newtype provides a set of specialized commands for CLI and agent invocation (all support `--json` output):
-
-| Command                 | Agent(s)                  | Description                                    |
-| ----------------------- | ------------------------- | ---------------------------------------------- |
-| `nt research [topic]`   | Researcher + Fact-Checker | Deep research + source verification            |
-| `nt write [topic]`      | Writer                    | Multi-style content generation                 |
-| `nt edit [file]`        | Editor                    | 4-layer content refinement                     |
-| `nt fact-check [topic]` | Fact-Checker              | Fact-checking and cross-verification           |
-| `nt analyze [topic]`    | Chief + Researcher        | Framework-based structured analysis            |
-| `nt extract`            | Extractor                 | Extract content from files/URLs/images         |
-| `nt archive <action>`   | Archivist                 | Knowledge base CRUD and semantic search        |
-| `nt pipeline [topic]`   | Full orchestration        | Research → Analyze → Write → Fact-check → Edit |
-
-Examples:
-
-```bash
-# Research a topic and output a report
-nt research "AI Agent architecture trends 2026" -o research.md
-
-# Write an article based on research
-nt write --input research.md --style newsletter -o draft.md
-
-# Full pipeline in one command
-nt pipeline "The future of MCP" --style essay --output-dir ./output/
-```
-
-### WeChat Integration
-
-newtype CLI has built-in [WeClaw](https://github.com/fastclaw-ai/weclaw) integration, bridging your WeChat with the full agent team via the [ACP (Agent Client Protocol)](https://github.com/nicepkg/acp). Send a message to your WeChat account, and Chief will handle it — research, write, fact-check, all from WeChat.
-
-| Command            | Description                                                |
-| ------------------ | ---------------------------------------------------------- |
-| `nt wechat setup`  | Download WeClaw binary + scan QR code to link WeChat       |
-| `nt wechat start`  | Start the WeChat agent bridge (auto-updates before launch) |
-| `nt wechat stop`   | Stop the WeChat agent bridge                               |
-| `nt wechat status` | Show installed version and running state                   |
-
-Quick start:
-
-```bash
-nt wechat setup    # One-time: download + QR login
-nt wechat start    # Start the bridge daemon
-```
-
-The agent bridge runs in the background. WeChat messages are routed to newtype's ACP server, which dispatches them to Chief using your configured model. No API key needed for WeChat — it uses the official [iLink API](https://ilinkai.weixin.qq.com).
-
-### Memory System
-
-newtype has a built-in automatic memory system — no manual management needed:
-
-- **Daily summaries**: Auto-generated LLM summaries after session idle, stored in `.newtype/memory/YYYY-MM-DD.md`
-- **Full transcripts**: Complete conversation history per session in `.newtype/memory/full/`
-- **Long-term memory**: Old logs auto-archived to `.newtype/MEMORY.md` every 7 days
-- **Auto-recall**: Relevant memories are automatically retrieved and injected into context during conversations
-
-Use `/memory-consolidate` to manually trigger archival.
-
-### Knowledge Base
-
-newtype provides two knowledge base initialization commands to help agents quickly understand your project:
-
-| Command      | Generated File | Description                                                                                  |
-| ------------ | -------------- | -------------------------------------------------------------------------------------------- |
-| `/init`      | `AGENTS.md`    | Project-level instruction file defining agent behavior and context for the current project   |
-| `/init-deep` | `KNOWLEDGE.md` | Deep knowledge index that auto-scans project structure and generates a detailed codebase map |
+newtype OS began as a fork of [oh-my-opencode, now oh-my-openagent](https://github.com/code-yeongyu/oh-my-openagent), and evolved through extensive customization for content-production workflows. It later expanded into an integrated CLI and a native Workstation. The fork relationship and upstream attribution are intentionally preserved as part of the project's open-source lineage.
 
 ## Links
 
-- **YouTube**: [youtube.com/@huanyihe777](https://www.youtube.com/@huanyihe777)
-- **Twitter**: [x.com/huangyihe](https://x.com/huangyihe)
-- **Substack**: [newtype.pro](https://newtype.pro/)
+- **Website:** [os.newtype.pro](https://os.newtype.pro/)
+- **Workstation releases:** [GitHub Releases](https://github.com/newtype-01/newtype-os/releases?q=workstation-v)
+- **YouTube:** [youtube.com/@huanyihe777](https://www.youtube.com/@huanyihe777)
+- **X:** [x.com/huangyihe](https://x.com/huangyihe)
+- **Substack:** [newtype.pro](https://newtype.pro/)
 
 ## License
 
-Based on [oh-my-opencode](https://github.com/code-yeongyu/oh-my-opencode), follows [SUL-1.0 License](https://github.com/code-yeongyu/oh-my-opencode/blob/master/LICENSE.md).
+Based on [oh-my-openagent](https://github.com/code-yeongyu/oh-my-openagent) and distributed under the [SUL-1.0 License](./LICENSE.md).

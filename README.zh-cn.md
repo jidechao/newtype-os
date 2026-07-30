@@ -4,24 +4,37 @@
 
 # newtype OS
 
-**Multi-Agent Content Team — 为内容生产而生的多 Agent 协作系统**
+**一个用于调研、写作、编辑与知识工作的 AI 内容团队。**
 
 由 [huangyihe（黄益贺）](https://x.com/huangyihe) 创作。
 
 <p>
-  <a href="https://www.npmjs.com/package/@newtype-os/cli"><img src="https://img.shields.io/npm/v/@newtype-os/cli?label=%40newtype-os%2Fcli" /></a>
-  <a href="https://www.npmjs.com/package/@newtype-os/plugin"><img src="https://img.shields.io/npm/v/@newtype-os/plugin?label=%40newtype-os%2Fplugin" /></a>
+  <a href="https://github.com/newtype-01/newtype-os/releases/download/workstation-v0.2.0-beta.2/newtype-workstation-mac-arm64.dmg"><strong>下载 newtype Workstation</strong></a>
+  ·
+  <a href="#newtype-cli"><strong>安装 newtype CLI</strong></a>
+  ·
+  <a href="#opencode-插件"><strong>使用开源插件版</strong></a>
 </p>
 
----
+<p>
+  <a href="https://www.npmjs.com/package/@newtype-os/cli"><img src="https://img.shields.io/npm/v/@newtype-os/cli?label=%40newtype-os%2Fcli" alt="@newtype-os/cli 版本" /></a>
+  <a href="https://www.npmjs.com/package/@newtype-os/plugin"><img src="https://img.shields.io/npm/v/@newtype-os/plugin?label=%40newtype-os%2Fplugin" alt="@newtype-os/plugin 版本" /></a>
+  <img src="https://img.shields.io/badge/plugin-maintenance%20mode-6b7280" alt="插件维护模式" />
+</p>
 
-## 这是什么
+> **应该选择哪个版本？**
+>
+> - **Apple Silicon Mac 用户：**推荐使用完整的原生工作台 **newtype Workstation**。
+> - **Windows、Linux、Intel Mac 或终端工作流：**使用 **newtype CLI**。
+> - **已经在使用 OpenCode：**可以选择开源兼容版本 **`@newtype-os/plugin`**。
 
-newtype OS 的内核是一套 **8 Agent 多层编排系统**，配备专业 Skills 和记忆系统，专为内容生产场景打造。
+> **仓库范围：**本仓库包含开源的 `@newtype-os/plugin` 插件代码，同时托管 newtype Workstation 官方安装包。本仓库不包含 newtype Workstation 和整合版 CLI 的源代码。
 
-你可以把它理解为：**一个驻扎在终端里的内容团队**。主编（Chief）负责与你对话、拆解需求；副主编（Deputy）调度执行；6 位专家各司其职——调研、核查、检索、提取、撰写、编辑。
+## newtype OS 是什么？
 
-```
+newtype OS 是一套**专为内容生产打造的 8 Agent 多层编排系统**。你可以把它理解为一个与你协作的内容团队，能够完成调研、核查、检索、提取、撰写和编辑。
+
+```text
 你 ↔ Chief（主编）
          ↓
      Deputy（副主编）
@@ -29,72 +42,63 @@ newtype OS 的内核是一套 **8 Agent 多层编排系统**，配备专业 Skil
      Researcher · Fact-Checker · Archivist · Extractor · Writer · Editor
 ```
 
-## 对比
+你只需要与 Chief 协作。Chief 负责理解目标，并协调完成任务所需的专家。
 
-|              | newtype Workstation                  | @newtype-os/cli（CLI）           | @newtype-os/plugin（插件）   |
-| ------------ | ------------------------------------ | -------------------------------- | ---------------------------- |
-| **性质**     | 原生 Mac 内容创作工作台              | 独立终端应用                     | OpenCode 插件                |
-| **安装**     | 下载 DMG                             | `npm install -g @newtype-os/cli` | `bun add @newtype-os/plugin` |
-| **依赖**     | Apple Silicon、macOS 11.5 或更高版本 | 自包含，无需其他依赖             | 需要 OpenCode                |
-| **启动**     | 应用程序 → newtype Workstation       | `nt`                             | `opencode`                   |
-| **配置目录** | `~/.config/newtype/`                 | `~/.config/newtype/`             | `~/.config/opencode/`        |
-| **项目目录** | `.newtype/`                          | `.newtype/`                      | `.opencode/`                 |
+## 选择适合你的版本
 
-### 核心差异
+| 产品 | 适合谁 | 开发状态 | 本仓库是否包含源码 |
+| --- | --- | --- | --- |
+| **newtype Workstation** | 希望使用原生内容工作台的 Apple Silicon Mac 用户 | 积极开发 | 否 |
+| **newtype CLI** | 跨平台和终端优先的用户 | 积极开发 | 否 |
+| **OpenCode 插件** | 已经在使用 OpenCode 的用户 | 维护模式 | 是 |
 
-`@newtype-os/cli` 不是"OpenCode 加了个插件"。它将 OpenCode 作为底层引擎整合进来，以独立产品的形态发布。安装后运行 `nt`，完整的 8 Agent 团队开箱即用。而 `@newtype-os/plugin` 是标准的 OpenCode 插件，将同样的 Agent 团队注入到你现有的 OpenCode 环境中。
+三个产品来自同一套 newtype Agent 团队体系，但不再承诺永久保持功能完全一致。当前产品开发重点已经转向 newtype Workstation 和 newtype CLI。OpenCode 插件继续面向现有用户开放，并处理必要的兼容性、安全性和关键问题。
 
-CLI 使用独立的配置命名空间：全局配置位于 `~/.config/newtype/`，项目级文件位于 `.newtype/`。这和 OpenCode 的 `~/.config/opencode/` 与 `.opencode/` 完全隔离。安装 CLI 不会影响你现有的 OpenCode 配置，也不会和你已安装的其他 OpenCode 插件（比如 oh-my-opencode）产生冲突。两者可以并行使用，互不干扰。
+## 安装
 
-功能层面，两个版本提供完全一致的体验。8 Agent 团队、内置 Skills、记忆系统、CLI 命令、MCP 集成，不论你选哪个版本都是一样的。选择任何一个都不会损失功能。
+### newtype Workstation
 
-如果你想要一个开箱即用的独立体验，或者你已经在用其他 OpenCode 插件、希望保持环境隔离，选 CLI。如果你已经是 OpenCode 用户，只想把 newtype 的 Agent 团队加到现有工作流里，插件版更轻量。
+原生 Mac 内容创作工作台，提供项目文件树、Markdown 编辑与预览，并在右侧栏中内置 newtype OS Agent 界面。
 
-newtype Workstation 目前仅支持 Apple Silicon Mac。CLI 支持 macOS（Apple Silicon / Intel）、Linux（x64 / ARM64）和 Windows（x64）。
+[**下载 newtype Workstation 0.2.0 Beta 2 Apple Silicon 版**](https://github.com/newtype-01/newtype-os/releases/download/workstation-v0.2.0-beta.2/newtype-workstation-mac-arm64.dmg)
 
-## 安装与使用
+系统要求：Apple Silicon（M1 或更新芯片），macOS 11.5 或更高版本。
 
-newtype OS 同时面向人类和 Agent。
+> 这是供早期测试的未签名、未公证 Beta 版本。首次尝试启动后，可能需要进入“系统设置 → 隐私与安全性”，点击“仍要打开”。请只从本 GitHub 仓库下载，并核对 Release 中发布的 SHA-256。
 
-### 面向人类
-
-#### 方式一：newtype Workstation Mac 版（未签名测试版）
-
-原生内容创作工作台，提供项目文件树、Markdown 编辑与预览，并在右侧栏内置完整的 newtype OS TUI。
-
-[下载 newtype Workstation 0.2.0 Beta 2 Apple Silicon 版](https://github.com/newtype-01/newtype-os/releases/download/workstation-v0.2.0-beta.2/newtype-workstation-mac-arm64.dmg)
-
-系统要求：Apple Silicon（M1 或更新芯片），macOS 11.5 或更高版本。暂不支持 Intel Mac。
-
-> 这是供早期测试的未签名、未公证 Beta 版本。首次尝试启动后，可能需要进入“系统设置 → 隐私与安全性”，点击“仍要打开”。请只从这个 GitHub Release 下载，并核对页面提供的 SHA-256。
-
-打开下载的 DMG，将 `newtype Workstation` 拖入“应用程序”文件夹即可。App 与 CLI 共享项目文件、`.newtype/` 数据和 `~/.config/newtype/` 配置。此 Beta 版本暂不启用自动更新。
+打开 DMG，将 `newtype Workstation` 拖入“应用程序”文件夹即可。此 Beta 版本暂不启用自动更新。
 
 [查看 Workstation 历史版本](https://github.com/newtype-01/newtype-os/releases?q=workstation-v)
 
-> 本仓库用于托管 newtype Workstation 的官方安装包和更新文件；仓库中的开源代码是 `@newtype-os/plugin` 插件版，不包含 Workstation 源码。
+### newtype CLI
 
-#### 方式二：newtype CLI
-
-开箱即用的终端 AI 助手，内置完整 Agent 团队。
+自包含、跨平台的终端应用，内置完整的 newtype Agent 团队。
 
 ```bash
 npm install -g @newtype-os/cli
-
-# 启动 TUI 交互界面
 nt
 ```
 
-#### 方式三：作为 OpenCode 插件
+CLI 使用 `~/.config/newtype/` 保存全局配置，使用 `.newtype/` 保存项目数据，不会修改 OpenCode 配置。
 
-如果你已在使用 [OpenCode](https://github.com/anomalyco/opencode)：
+如果希望让本地 AI 编程工具学会调用 newtype 命令：
+
+```bash
+nt init
+```
+
+支持的工具包括 Claude Code、Cursor、Copilot、Windsurf、Cline、Roo Code、Zed、Goose 和 Amazon Q。
+
+### OpenCode 插件
+
+如果你已经在使用 [OpenCode](https://github.com/anomalyco/opencode)：
 
 ```bash
 cd ~/.config/opencode
 bun add @newtype-os/plugin
 ```
 
-编辑 `~/.config/opencode/opencode.json`：
+在 `~/.config/opencode/opencode.json` 中加入：
 
 ```json
 {
@@ -102,187 +106,61 @@ bun add @newtype-os/plugin
 }
 ```
 
-### 面向 Agent
+插件使用 OpenCode 的 `~/.config/opencode/` 和 `.opencode/` 命名空间。
 
-安装 newtype CLI 后，系统内置一整套 CLI 命令（`nt research`、`nt write`、`nt pipeline` 等），专为 Agent 调用设计。
+配置与开发说明请查看[插件指南](./docs/plugin-guide.md)。提交大型插件功能之前，请先阅读[维护政策](./MAINTENANCE.md)。
 
-运行 `nt init`，newtype 会自动扫描本地已安装的 AI 开发工具，并注入 Skill 文件，教会 Agent 如何使用这些 CLI 命令：
+## Agent 团队
 
-```bash
-npm install -g @newtype-os/cli
-nt init
-```
+| Agent | 角色 | 职责 |
+| --- | --- | --- |
+| **Chief** | 主编 | 思考伙伴与主要任务协调者 |
+| **Deputy** | 副主编 | 将任务调度给下游专家 |
+| **Researcher** | 研究员 | 外部调研与趋势发现 |
+| **Fact-Checker** | 核查员 | 事实核查与来源评估 |
+| **Archivist** | 档案员 | 内部知识检索与关联 |
+| **Extractor** | 提取专家 | 从文档、图片和网页中提取内容 |
+| **Writer** | 写作者 | 根据目标和素材生成结构化初稿 |
+| **Editor** | 编辑 | 改善逻辑、清晰度、语气和一致性 |
 
-支持自动检测的工具：Claude Code、Cursor、Copilot、Windsurf、Cline、Roo Code、Zed、Goose、Amazon Q 等。
+## 核心能力
 
-注入后，这些 Agent 就知道何时以及如何调用 `nt research`、`nt pipeline` 等命令来增强自身能力。
+- 多 Agent 调研、写作、事实核查和编辑
+- 面向内容生产的专业 Skills 与质量门
+- 自动会话摘要和长期记忆
+- 项目知识库初始化与检索
+- 为不同 Agent 分别配置模型
+- 同时面向人类和 Agent 的命令行工作流
+- 可选的 MCP 集成
 
-## 配置
+详细文档：
 
-### 连接模型供应商
+- [CLI 指南](./docs/cli-guide.md)
+- [编排系统指南](./docs/orchestration-guide.md)
+- [内容类型与 Skill 指南](./docs/category-skill-guide.md)
+- [OpenCode 插件指南](./docs/plugin-guide.md)
 
-在 TUI 中使用 `/connect` 命令连接模型供应商（支持 75+ 家），或通过命令行：
+## 维护与贡献
 
-```bash
-nt auth login
-```
+`@newtype-os/plugin` 已进入**维护模式**。我们欢迎范围明确的兼容性、安全性、文档和关键问题修复。新的产品开发主要集中在 newtype Workstation 和 newtype CLI。
 
-### 配置 Agent 模型
+提交 Pull Request 前，请阅读：
 
-**方式一**：在 TUI 中使用 `/agent-models` 命令，在界面中为各个 Agent 配置模型。
+- [维护政策](./MAINTENANCE.md)
+- [贡献指南](./CONTRIBUTING.md)
 
-**方式二**：直接编辑配置文件。
+## 项目历史
 
-- newtype CLI：`~/.config/newtype/newtype-profile.json`
-- OpenCode 插件：`~/.config/opencode/newtype-profile.json`
-
-```json
-{
-  "agents": {
-    "chief": { "model": "你偏好的模型" },
-    "deputy": { "model": "你偏好的模型" },
-    "researcher": { "model": "你偏好的模型" },
-    "writer": { "model": "你偏好的模型", "temperature": 0.7 }
-  }
-}
-```
-
-全部 8 个 Agent 均可独立配置模型和参数。
-
-### 自定义 Chief 人格
-
-创建 `.newtype/SOUL.md`（OpenCode 插件为 `.opencode/SOUL.md`）来定制 Chief 的沟通风格：
-
-```bash
-/init-soul  # 生成默认模板
-```
-
-### 禁用特定功能
-
-```json
-{
-  "disabled_agents": ["fact-checker"],
-  "disabled_skills": ["super-analyst"],
-  "disabled_hooks": ["memory-system"],
-  "disabled_mcps": ["sequential-thinking"]
-}
-```
-
-## 功能
-
-### Agent 团队
-
-| Agent            | 角色   | 职责                                 |
-| ---------------- | ------ | ------------------------------------ |
-| **Chief**        | 主编   | 你的对话入口——思考伙伴 + 任务协调    |
-| **Deputy**       | 副主编 | Chief 的执行层，调度下游专家         |
-| **Researcher**   | 研究员 | 外部情报搜集、趋势发现               |
-| **Fact-Checker** | 核查员 | 事实验证、来源可信度评估             |
-| **Archivist**    | 档案员 | 内部知识库检索与关联                 |
-| **Extractor**    | 提取员 | PDF/图片/网页内容提取，转为 Markdown |
-| **Writer**       | 撰稿人 | 将素材转化为结构化初稿               |
-| **Editor**       | 编辑   | 语言润色、逻辑加固、风格统一         |
-
-**你只需要与 Chief 对话。** Chief 会根据需要自动调度其他 Agent。
-
-### 内置 Skills 与 MCP 服务器
-
-Agent 在执行任务时会自动加载对应的 Skill 框架：
-
-| Skill                  | 命令                  | 说明                                                      |
-| ---------------------- | --------------------- | --------------------------------------------------------- |
-| **Super Workflow**     | `/super-workflow`     | 带质量门控的可缩放内容生产流程                            |
-| **Super Analyst**      | `/super-analyst`      | 决策分析、结构化调研和框架选择                            |
-| **Super Writer**       | `/super-writer`       | 轻量方法论驱动的内容起草和风格控制                        |
-| **Super Fact-Checker** | `/super-fact-checker` | 声明提取、事实核查、来源评估和修正文案                    |
-| **Super Editor**       | `/super-editor`       | 修改已有内容并解释关键改动                                |
-| **Super Interviewer**  | `/super-interviewer`  | 思路澄清、需求挖掘和苏格拉底式追问                        |
-| **Super Obsidian**     | `/super-obsidian`     | Obsidian CLI 优先的笔记库操作：搜索、阅读、创建与管理笔记 |
-
-Super Workflow 是管控整个内容生命周期的编排层——它定义*何时*做*什么*，以及如何在每个阶段验证质量。Super Writer 和 Super Editor 提供执行层面的专业技法。Chief 在任务需要结构化框架时会自动加载对应 Skill，你也可以通过斜杠命令手动触发。当检测到 Obsidian vault（`.obsidian/` 目录）时，Super Obsidian 会自动加载。
-
-| MCP                     | 默认状态 | 配置           |
-| ----------------------- | -------- | -------------- |
-| **websearch**（Exa）    | 已启用   | 无需配置       |
-| **sequential-thinking** | 已启用   | 无需配置       |
-| **tavily**              | 未启用   | 需要 `api_key` |
-| **firecrawl**           | 未启用   | 需要 `api_key` |
-
-### CLI 命令
-
-除了 TUI 交互界面，newtype 还提供一组面向命令行和 AI Agent 调用的专业命令（均支持 `--json` 输出）：
-
-| 命令                    | 调度的 Agent              | 说明                                           |
-| ----------------------- | ------------------------- | ---------------------------------------------- |
-| `nt research [topic]`   | Researcher + Fact-Checker | 深度调研 + 来源验证                            |
-| `nt write [topic]`      | Writer                    | 多风格内容生成                                 |
-| `nt edit [file]`        | Editor                    | 四层内容精修                                   |
-| `nt fact-check [topic]` | Fact-Checker              | 事实核查与交叉验证                             |
-| `nt analyze [topic]`    | Chief + Researcher        | 基于框架的结构化分析                           |
-| `nt extract`            | Extractor                 | 从文件/URL/图片提取内容                        |
-| `nt archive <action>`   | Archivist                 | 知识库存取与语义搜索                           |
-| `nt pipeline [topic]`   | 全流程编排                | Research → Analyze → Write → Fact-check → Edit |
-
-示例：
-
-```bash
-# 研究一个主题并输出报告
-nt research "AI Agent 架构趋势 2026" -o research.md
-
-# 基于调研结果写文章
-nt write --input research.md --style newsletter -o draft.md
-
-# 全流程一键执行
-nt pipeline "MCP 协议的未来" --style essay --output-dir ./output/
-```
-
-### 微信集成
-
-newtype CLI 内置了 [WeClaw](https://github.com/fastclaw-ai/weclaw) 集成，通过 [ACP（Agent Client Protocol）](https://github.com/nicepkg/acp) 将你的微信与完整 Agent 团队打通。在微信里给自己发一条消息，Chief 就会接手处理——调研、写作、核查，全部在微信完成。
-
-| 命令               | 说明                                      |
-| ------------------ | ----------------------------------------- |
-| `nt wechat setup`  | 下载 WeClaw 二进制文件 + 扫码绑定微信     |
-| `nt wechat start`  | 启动微信 Agent 桥接（启动前自动检测更新） |
-| `nt wechat stop`   | 停止微信 Agent 桥接                       |
-| `nt wechat status` | 查看已安装版本和运行状态                  |
-
-快速开始：
-
-```bash
-nt wechat setup    # 首次：下载 + 扫码登录
-nt wechat start    # 启动桥接守护进程
-```
-
-桥接进程在后台运行。微信消息通过 newtype 的 ACP 服务器路由，使用你配置的模型调度 Chief 处理。微信端无需 API Key——使用的是微信官方 [iLink API](https://ilinkai.weixin.qq.com)。
-
-### 记忆系统
-
-newtype 内置自动记忆系统，无需手动管理：
-
-- **每日摘要**：会话空闲后自动生成 LLM 摘要，存储于 `.newtype/memory/YYYY-MM-DD.md`
-- **完整记录**：每个会话的全量对话保存在 `.newtype/memory/full/`
-- **长期记忆**：每 7 天自动将旧日志归档到 `.newtype/MEMORY.md`
-- **自动召回**：对话时自动检索相关记忆注入上下文，无需重复说明
-
-使用 `/memory-consolidate` 可手动触发归档。
-
-### 知识库
-
-newtype 提供两层知识库初始化命令，帮助 Agent 快速理解项目：
-
-| 命令         | 生成文件       | 说明                                                      |
-| ------------ | -------------- | --------------------------------------------------------- |
-| `/init`      | `AGENTS.md`    | 项目级指令文件，定义 Agent 在当前项目中的行为规范和上下文 |
-| `/init-deep` | `KNOWLEDGE.md` | 深度知识索引，自动扫描项目结构并生成详细的代码库地图      |
+newtype OS 最初 fork 自 [oh-my-opencode（现名 oh-my-openagent）](https://github.com/code-yeongyu/oh-my-openagent)，随后围绕内容生产工作流进行了长期定制，并逐步发展出整合版 CLI 和原生 Workstation。我们有意保留 Fork 关系和上游署名，以记录项目的开源谱系。
 
 ## 链接
 
-- **YouTube**: [youtube.com/@huanyihe777](https://www.youtube.com/@huanyihe777)
-- **Twitter**: [x.com/huangyihe](https://x.com/huangyihe)
-- **Substack**: [newtype.pro](https://newtype.pro/)
-- **知识星球**: [t.zsxq.com/19IaNz5wK](https://t.zsxq.com/19IaNz5wK)
+- **官网：**[os.newtype.pro](https://os.newtype.pro/)
+- **Workstation 版本：**[GitHub Releases](https://github.com/newtype-01/newtype-os/releases?q=workstation-v)
+- **YouTube：**[youtube.com/@huanyihe777](https://www.youtube.com/@huanyihe777)
+- **X：**[x.com/huangyihe](https://x.com/huangyihe)
+- **Substack：**[newtype.pro](https://newtype.pro/)
 
 ## 许可证
 
-基于 [oh-my-opencode](https://github.com/code-yeongyu/oh-my-opencode)，遵循 [SUL-1.0 许可证](https://github.com/code-yeongyu/oh-my-opencode/blob/master/LICENSE.md)。
+基于 [oh-my-openagent](https://github.com/code-yeongyu/oh-my-openagent)，按照 [SUL-1.0 License](./LICENSE.md) 发布。
