@@ -9,7 +9,7 @@
 由 [huangyihe（黄益贺）](https://x.com/huangyihe) 创作。
 
 <p>
-  <a href="https://github.com/newtype-01/newtype-os/releases/download/workstation-v0.2.0-beta.2/newtype-workstation-mac-arm64.dmg"><strong>下载 newtype Workstation</strong></a>
+  <a href="https://github.com/newtype-01/newtype-os/releases/download/workstation-latest/newtype-workstation-mac-arm64.dmg"><strong>下载 newtype Workstation</strong></a>
   ·
   <a href="#newtype-cli"><strong>安装 newtype CLI</strong></a>
   ·
@@ -60,13 +60,13 @@ newtype OS 是一套**专为内容生产打造的 8 Agent 多层编排系统**�
 
 原生 Mac 内容创作工作台，提供项目文件树、Markdown 编辑与预览，并在右侧栏中内置 newtype OS Agent 界面。
 
-[**下载 newtype Workstation 0.2.0 Beta 2 Apple Silicon 版**](https://github.com/newtype-01/newtype-os/releases/download/workstation-v0.2.0-beta.2/newtype-workstation-mac-arm64.dmg)
+[**下载 newtype Workstation 0.3.0 Apple Silicon 版**](https://github.com/newtype-01/newtype-os/releases/download/workstation-latest/newtype-workstation-mac-arm64.dmg)
 
 系统要求：Apple Silicon（M1 或更新芯片），macOS 11.5 或更高版本。
 
-> 这是供早期测试的未签名、未公证 Beta 版本。首次尝试启动后，可能需要进入“系统设置 → 隐私与安全性”，点击“仍要打开”。请只从本 GitHub 仓库下载，并核对 Release 中发布的 SHA-256。
+> 这是经过临时签名、尚未通过 Apple 公证的版本。首次尝试启动后，可能需要进入“系统设置 → 隐私与安全性”，点击“仍要打开”。请只从本 GitHub 仓库下载，并核对 Release 中发布的 SHA-256。
 
-打开 DMG，将 `newtype Workstation` 拖入“应用程序”文件夹即可。此 Beta 版本暂不启用自动更新。
+打开 DMG，将 `newtype Workstation` 拖入“应用程序”文件夹即可。本版本暂不启用自动更新。
 
 [查看 Workstation 历史版本](https://github.com/newtype-01/newtype-os/releases?q=workstation-v)
 

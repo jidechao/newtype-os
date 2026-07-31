@@ -9,7 +9,7 @@
 Created by [huangyihe](https://x.com/huangyihe).
 
 <p>
-  <a href="https://github.com/newtype-01/newtype-os/releases/download/workstation-v0.2.0-beta.2/newtype-workstation-mac-arm64.dmg"><strong>Download newtype Workstation</strong></a>
+  <a href="https://github.com/newtype-01/newtype-os/releases/download/workstation-latest/newtype-workstation-mac-arm64.dmg"><strong>Download newtype Workstation</strong></a>
   ·
   <a href="#newtype-cli"><strong>Install newtype CLI</strong></a>
   ·
@@ -60,13 +60,13 @@ The products share the same newtype agent-team lineage, but they are no longer p
 
 A native Mac content workspace with a project file tree, Markdown editing and preview, and the newtype OS agent interface built into the right sidebar.
 
-[**Download newtype Workstation 0.2.0 Beta 2 for Apple Silicon**](https://github.com/newtype-01/newtype-os/releases/download/workstation-v0.2.0-beta.2/newtype-workstation-mac-arm64.dmg)
+[**Download newtype Workstation 0.3.0 for Apple Silicon**](https://github.com/newtype-01/newtype-os/releases/download/workstation-latest/newtype-workstation-mac-arm64.dmg)
 
 Requirements: Apple Silicon (M1 or later) and macOS 11.5 or later.
 
-> This is an unsigned, unnotarized beta for early testing. After trying to open it once, macOS may require you to choose **Open Anyway** in **System Settings → Privacy & Security**. Download it only from this GitHub repository and verify the SHA-256 published with the release.
+> This build is ad-hoc signed and has not been notarized by Apple. macOS may require you to choose **Open Anyway** in **System Settings → Privacy & Security** after the first launch attempt. Download it only from this GitHub repository and verify the published SHA-256.
 
-Open the DMG and drag `newtype Workstation` into Applications. Automatic updates are not enabled for this beta.
+Open the DMG and drag `newtype Workstation` into Applications. Automatic updates are not enabled for this build.
 
 [View Workstation release history](https://github.com/newtype-01/newtype-os/releases?q=workstation-v)
 
