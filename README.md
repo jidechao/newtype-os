@@ -22,6 +22,8 @@ Created by [huangyihe](https://x.com/huangyihe).
   <img src="https://img.shields.io/badge/plugin-maintenance%20mode-6b7280" alt="Plugin maintenance mode" />
 </p>
 
+[![newtype Workstation — AI content team](./assets/social-preview.png)](https://os.newtype.pro/)
+
 > **Which version should I use?**
 >
 > - **Apple Silicon Mac:** choose **newtype Workstation** for the complete native workspace.

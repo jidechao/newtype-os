@@ -22,6 +22,8 @@
   <img src="https://img.shields.io/badge/plugin-maintenance%20mode-6b7280" alt="插件维护模式" />
 </p>
 
+[![newtype Workstation——AI 内容团队](./assets/social-preview.png)](https://os.newtype.pro/)
+
 > **应该选择哪个版本？**
 >
 > - **Apple Silicon Mac 用户：**推荐使用完整的原生工作台 **newtype Workstation**。
